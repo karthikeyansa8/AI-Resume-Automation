@@ -1,0 +1,1 @@
+from . person_data import Command as persondetailcommand

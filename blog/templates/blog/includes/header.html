@@ -1,0 +1,40 @@
+{% load static %}
+
+<!-- navbar -->
+    <nav class="navbar">
+        <h1>I-mac</h1>
+
+        <div style="flex-basis: 50%; ">
+            <marquee behavior="scroll" direction="left" scrollamount="10" style="margin-top: 10px;">
+                <h5>Lorem ipsum dolor sit amet consectetur, adipisicing elit. At, culpa.</h5>
+            </marquee>
+        </div>
+
+
+        <div class="navbar-links">
+            <p class="navbar-link"><a href="/blog/index/">Home</a></p>
+            <p class="navbar-link"><a href="/blog/collection/">Collections</a></p>
+            <p class="navbar-link"><a href="/blog/contact/">Contact</a></p>
+
+        </div>
+
+        <div class="navbar-menu-toggle" onclick="shownavbar()">
+            <i class="fa-solid fa-bars"></i>
+
+        </div>
+
+    </nav>
+
+    <!-- side nav bar -->
+    <div class="side-navbar">
+        <p style="text-align: right;" onclick="closenavbar()">
+            <i class="fa-solid fa-xmark"></i>
+        </p>
+
+        <div class="sie-navbar-links">
+            <p class="side-navbar-link"><a href="/blog/index/">Home</a></p>
+            <p class="side-navbar-link"><a href="/blog/collection/">Collections</a></p>
+            <p class="side-navbar-link"><a href="/blog/contact/">Contact</a></p>
+
+        </div>
+    </div>

@@ -1,0 +1,32 @@
+{% extends 'boomers/base.html' %}
+{% load static %}
+{% block content %}
+  <div class="form-wrapper">
+    <div class="form-container">
+      <h2 class="form-title">Login</h2>
+      <form method="POST" class="form-element">
+        {% csrf_token %}
+
+        {% comment %}for showing success message{% endcomment %}
+        <div>
+          {% include 'boomers/includes/errors.html' %}
+        </div>
+
+        <label for="username" class="form-label">Username:</label>
+        <input type="text" id="username" name="username" class="form-input" value="{{ form.username.value|default:'' }}" required />
+
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" id="password" name="password" class="form-input" required />
+
+        <div class="forgot-password">
+          <a href="{% url 'forgot_password' %}" class="form-link">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="form-button">Login</button>
+      </form>
+      <p class="form-text">
+        Don't have an account? <a href="{% url 'register' %}" class="form-link">Register here</a>
+      </p>
+    </div>
+  </div>
+{% endblock %}

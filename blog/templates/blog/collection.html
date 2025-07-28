@@ -1,0 +1,57 @@
+{% extends 'blog/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <!-- product -->
+
+    <div class="product-section">
+        <form class="product-search">
+            <input type="text" id="search" placeholder="Search...">
+            <i class="fa-solid fa-magnifying-glass "></i>
+        </form>
+
+        <div class="products" id="product">
+
+            <div class="product-box">
+                <img src="{% static 'blog/img/iphone 11.jpg'%}">
+                <p>Iphone 11 </p>
+            </div>
+            <div class="product-box">
+                <img src="{% static 'blog/img/iphone-12.webp' %}">
+                <p>Iphone 12 </p>
+            </div>
+            <div class="product-box">
+                <img src="{% static 'blog/img/iphone-12-mini.webp' %}">
+                <p>Iphone 12 Mini </p>
+            </div>
+            <div class="product-box">
+                <img src="{% static 'blog/img/iphone13.jpg' %}">
+                <p>Iphone 13 </p>
+            </div>
+            <div class="product-box">
+                <img src="{% static 'blog/img/iphone 13 pro.webp' %}">
+                <p>Iphone 13 Pro</p>
+            </div>
+            <div class="product-box"> 
+                <img src="{% static 'blog/img/iPhone-14.webp' %}">
+                <p>Iphone 14 </p>
+            </div>
+            <div class="product-box">
+                <img src="{% static 'blog/img/iPhone-14-Pro-.jpeg' %}">
+                <p>Iphone 14 Pro </p>
+            </div>
+            <div class="product-box">
+                <img src="{% static 'blog/img/iphone 15 promax.webp' %}">
+                <p>Iphone 15 Pro Max </p>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+    

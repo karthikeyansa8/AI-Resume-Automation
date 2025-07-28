@@ -1,0 +1,37 @@
+{% extends 'boomers/base.html' %}
+
+{% load static %}
+{% block content %}
+  <!-- content -->
+
+  <div class="summary-main">
+    {% if person_details %}
+      {% for person_detail in person_details %}
+        <div class="summary-content">
+          <div>
+            <img src="{% static 'boomers/img/' %}{{ person_detail.name }}.jpg" />  
+          </div>
+
+          <div class="summary">
+            <p>Name : {{ person_detail.name|default:'Karthikeyan' }}</p>
+            <p>Department : {{ person_detail.department|default:'AI&DS' }}</p>
+            <p>Role : {{ person_detail.role|default:'Backend Developer' }}</p>
+            <a href="{% url 'detail' slug=person_detail.slug %}">view more <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="summary-content">
+        <div>
+          <img src="" />
+        </div>
+        <div class="summary">
+          <p>Name : Karthikeyan</p>
+          <p>Department : AI&DS</p>
+          <p>Role : Backend Developer</p>
+          <a href="">view more <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

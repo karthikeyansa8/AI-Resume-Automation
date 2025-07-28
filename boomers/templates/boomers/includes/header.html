@@ -1,0 +1,21 @@
+<header>
+  <div class="header">
+    <h3>Boomers</h3>
+    {% if user.is_authenticated %}
+      <p>
+        <a style=" margin-right: 10px;" href="{% url 'index' %}">Home</a>
+      </p>
+      <p>
+        <a style=" margin-right: 10px;" href="{% url 'logout' %}">Logout</a>
+      </p>
+    {% else %}
+      <p>
+        <a style=" margin-right: 10px;" href="{% url 'register' %}">Register</a>
+      </p>
+
+      <p>
+        <a style=" margin-right: 10px;" href="{% url 'login' %}">Login</a>
+      </p>
+    {% endif %}
+  </div>
+</header>

@@ -1,0 +1,43 @@
+{% extends 'boomers/base.html'%}
+{% load static %}
+
+{% block content%}
+    <div class="person-container">
+        <div class="person-card">
+            <div class="person-photo">
+                <img src="{% static 'boomers/img/' %}{{name}}.jpg" />
+            </div>
+            <div class="person-details">
+                <h1 class="person-name">{{person_detail.name}}</h1>
+                <div class="person-title">{{person_detail.role}}</div>
+                <div class="person-department">{{person_detail.department}}</div>
+                
+                <div class="section about-section">
+                    <h2>About</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor.</p>
+                </div>
+                
+                <div class="section certifications-section">
+                    <h2>Certifications</h2>
+                    <ul class="certifications-list">
+                        <li>Certified Web Developer (CWD) - 2022</li>
+                        <li>Microsoft Certified: Azure Solutions Architect - 2021</li>
+                        <li>Google Cloud Professional Data Engineer - 2020</li>
+                        <li>AWS Certified Solutions Architect - 2019</li>
+                    </ul>
+                </div>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span class="contact-icon">📧</span>
+                        <span>{{person_detail.email}}</span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📱</span>
+                        <span>{{person_detail.phone_number}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

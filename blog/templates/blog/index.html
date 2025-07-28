@@ -1,0 +1,130 @@
+{% extends 'blog/base.html' %}
+
+{% load static%}
+{% block content %}
+
+
+    <!-- header -->
+    <div class="header">
+        <div>
+            <h1>Level up your style</h1>
+            <p>with our stunning collections</p>
+            <button class=".header-button">Shop Now</button>
+        </div>
+
+        <div>
+            <img class="header-image" src="{%static 'blog/img/iphone13.jpg'%}" alt="I-phone 13">
+        </div>
+
+    </div>
+
+    <!-- service -->
+    <div class="service">
+        <div class="service-conatiner-1">
+            <div>
+                <h2>We Provide Best</h2>
+                <h2>Customer Experience</h2>
+            </div>
+
+            <div>
+                <p>|| We have a best customer Experience!</p>
+            </div>
+        </div>
+
+        <div class="service-conatiner-2">
+            <div>
+                <i class="fa-regular fa-face-smile"></i>
+                <h4>Satisfaction Guaranteed</h4>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo magnam necessitatibus minima, ipsa
+                    minus velit!</p>
+            </div>
+            <div>
+                <i class="fa-regular fa-face-smile"></i>
+                <h4>Trusted Sellers</h4>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo magnam necessitatibus minima, ipsa
+                    minus velit!</p>
+            </div>
+            <div>
+                <i class="fa-regular fa-face-smile"></i>
+                <h4>Happy Customer</h4>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum quis ratione, veritatis quo
+                    labore ipsam!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- new arrival -->`
+    <div>
+        <h2 class="new-arrival-heading" style="margin-left: 45%; margin-top: 20px; margin-bottom: 20px;">New Arrival
+        </h2>
+        <div class="new-arrival">
+            {%if posts%}
+                {% for post in posts%}
+                <div class="new-arrival-container">
+                    <h3 style="text-align: center;">{{post.new_arrival_title}}</h3>
+                    <img src="{% static post.new_arrival_img_url %}" alt="{{post.title}}">
+                    <p style="text-align: center; margin-top: 10px;">{{post.new_arrival_description}}</p>
+                    <button><a href="">Shop Now</a> <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            
+                {%endfor%}
+                {%else%}
+                <center>
+                    <h2>No Posts Found</h2>
+                </center>
+            {%endif%}
+        </div>
+    </div>
+
+
+    <div style="flex-basis: 100%; background-color: black; height: 2px; position: relative; left: 20px; right: 100px;">
+    </div>
+
+    <!-- top 20% discount -->
+    <div>
+        <h2 class="new-arrival-heading" style="margin-left: 45%; margin-top: 20px; margin-bottom: 20px;">Top 20%
+            Discount!!</h2>
+        <div class="new-arrival">
+            <div class="new-arrival-container">
+                <img src="{% static 'blog/img/iphone-14.webp' %}" alt="I-phone 14">
+                <button>Shop Now <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="new-arrival-container">
+                <img src="{% static 'blog/img/iphone-14.webp' %}" alt="I-phone 14">
+                <button>Shop Now <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="new-arrival-container">
+                <img src="{% static 'blog/img/iphone-14.webp' %}" alt="I-phone 14">
+                <button>Shop Now <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="new-arrival-container">
+                <img src="{% static 'blog/img/iphone-14.webp' %}" alt="I-phone 14">
+                <button>Shop Now <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="new-arrival-container">
+                <img src="{% static 'blog/img/iphone-14.webp' %}" alt="I-phone 14">
+                <button>Shop Now <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- news -->
+
+    <br>
+    <div class="news">
+        <h2> Join Our News Letter</h2>
+        <p>Subscribe to our newsletter to get the latest updates and offers.</p>
+        <div>
+            <input type="text" class="search">
+        </div>
+        <div>
+            <button >Subscribe <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+{% endblock %}
+
+   

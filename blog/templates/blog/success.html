@@ -1,0 +1,32 @@
+{% extends 'blog/base.html' %}
+
+{% comment %} {% load static %} {% endcomment %}
+{% block content %}
+  <center>
+    <div class="main">
+      <div class="success">
+        <h3>Successfully Submited the form</h3>
+        <h4><a href="/blog/index/">Go back to home page</a></h4>
+      </div>
+    </div>
+    </center>
+
+    <style>
+
+    .main {
+            align-items: center;
+        }
+      .success {
+        background-color: #1d232c;
+        color: white;
+        padding: 20px;
+        border-radius: 5px;
+        width: 400px;
+        height: 200px;
+        align-content: center;
+        margin-top: 8%;
+        margin-bottom: 8%;
+      }
+    </style>
+  
+{% endblock %}

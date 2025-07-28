@@ -1,0 +1,201 @@
+{% extends 'boomers/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container-main">
+    <div class="container">
+      <div class="nav-buttons">
+        <button type="button" onclick="showSection('personal')" class="active">Personal Details</button>
+        <button type="button" onclick="showSection('education')">Education</button>
+        <button type="button" onclick="showSection('skills')">Skills</button>
+        <button type="button" onclick="showSection('projects')">Projects</button>
+        <button type="button" onclick="showSection('internship')">Internship</button>
+        <button type="button" onclick="showSection('leadership')">Leadership & Extracurricular</button>
+        <button type="button" onclick="showSection('certifications')">Certifications</button>
+      </div>
+
+      <form id="resumeForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+          {% include 'boomers/includes/errors.html' %}
+        </div>
+        <!-- Personal -->
+        <div id="personal" class="form-section active">
+          <h2>Personal Details</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="first_name">First Name</label>
+              <input type="text" name="first_name" id="first_name" value="{{ form.first_name.value|default:'' }}" />
+            </div>
+            <div class="form-group">
+              <label for="last_name">Last Name</label>
+              <input type="text" name="last_name" id="last_name" value="{{ form.last_name.value|default:'' }}" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" name="email" id="email" value="{{ form.email.value|default:'' }}" />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="tel" name="phone" id="phone" value="{{ form.phone.value|default:'' }}" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="linkedin">LinkedIn</label>
+              <input type="text" name="linkedin" id="linkedin" placeholder="https://linkedin.com/in/..." value="{{ form.linkedin.value|default:'' }}" />
+            </div>
+            <div class="form-group">
+              <label for="github">GitHub</label>
+              <input type="text" name="github" id="github" placeholder="https://github.com/..." value="{{ form.github.value|default:'' }}" />
+            </div>
+            <div class="form-group">
+              <label for="file">File</label>
+              <input type="file" name="img_url" id="github"  />
+            </div>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div id="education" class="form-section">
+          <h2>Educational Details</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="college_name">College Name</label>
+              <input type="text" name="college_name" id="college_name" value="{{ form.college_name.value|default:'' }}" />
+              {% if form.college_name.errors %} 
+                {% for error in form.college_name.errors %}
+                    <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="degree">Degree</label>
+              <input type="text" name="degree" id="degree" value="{{ form.degree.value|default:'' }}" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cgp">CGPA</label>
+              <input type="text" name="cgpa" id="cgpa" value="{{ form.cgpa.value|default:'' }}" />
+
+              {% comment %} give the name value to the errors checking eg: name="cgpa" {% endcomment %}
+              {% if form.cgpa.errors %} 
+                {% for error in form.cgpa.errors %}
+                    <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="hsc_school">HSC School Name</label>
+              <input type="text" name="hsc_scl_name" id="hsc_school" value="{{ form.hsc_scl_name.value|default:'' }}" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="hsc_marks">HSC Percentage</label>
+              <input type="text" name="hsc_marks" id="hsc_marks" value="{{ form.hsc_marks.value|default:'' }}" />
+            </div>
+            <div class="form-group">
+              <label for="sslc_school">SSLC School Name</label>
+              <input type="text" name="sslc_scl_name" id="sslc_school" value="{{ form.sslc_scl_name.value|default:'' }}" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="sslc_marks">SSLC Percentage</label>
+              <input type="text" name="sslc_marks" id="sslc_marks" value="{{ form.sslc_marks.value|default:'' }}" />
+            </div>
+            <div class="form-group"></div>
+          </div>
+        </div>
+
+        <!-- Skills -->
+        <div id="skills" class="form-section">
+          <h2>Skills</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="programming_languages">Programming Languages</label>
+              <input type="text" name="programming_languages" id="programming_languages" />
+            </div>
+            <div class="form-group">
+              <label for="tools_technologies">Tools & Technologies</label>
+              <input type="text" name="tools_technologies" id="tools_technologies" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Projects -->
+        <div id="projects" class="form-section">
+          <h2>Projects</h2>
+          <div class="form-row">
+            <div class="form-group" style="max-width: 200px;">
+              <label for="projectCount">Number of Projects</label>
+              <input type="number" min="0" max="10" id="projectCount" />
+            </div>
+            <div class="form-group" style="align-self: flex-end;">
+              <button type="button" style="padding:9px 28px;" onclick="generateProjects()">Add Projects</button>
+            </div>
+          </div>
+          <div class="dynamic-projects" id="projectContainer"></div>
+        </div>
+
+        <!-- Internship -->
+        <div id="internship" class="form-section">
+          <h2>Internship</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="intern_company">Company Name</label>
+              <input type="text" name="intern_company" id="intern_company" />
+            </div>
+            <div class="form-group">
+              <label for="intern_location">Location</label>
+              <input type="text" name="intern_location" id="intern_location" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="intern_role">Role</label>
+              <input type="text" name="intern_role" id="intern_role" />
+            </div>
+            <div class="form-group">
+              <label for="intern_duration">Duration</label>
+              <input type="text" name="intern_duration" id="intern_duration" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Leadership -->
+        <div id="leadership" class="form-section">
+          <h2>Leadership & Extracurricular</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="activity">Activity</label>
+              <input type="text" name="activity" id="activity" />
+            </div>
+            <div class="form-group">
+              <label for="activity_description">Description</label>
+              <textarea name="activity_description" id="activity_description"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certifications -->
+        <div id="certifications" class="form-section">
+          <h2>Certifications</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="certifications">Certifications (List)</label>
+              <textarea name="certifications" id="certifications"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="form-button">Submit</button>
+      </form>
+    </div>
+  </div>
+  <script src="{% static 'boomers/script.js' %}"></script>
+{% endblock %}

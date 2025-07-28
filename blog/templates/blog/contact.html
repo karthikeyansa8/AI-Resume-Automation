@@ -1,0 +1,34 @@
+{% extends 'blog/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <!-- contact -->
+  <form method="post">
+    {% comment %}The below line is for the form submission is safe{% endcomment %}
+    {% csrf_token %}
+    {% comment %} {{ form.as_p }} {% endcomment %}
+
+    <div class="contact">
+      <div class="c">
+        <h1>Contact Us</h1>
+      </div>
+
+      <div class="c">
+        <p>Name:</p>
+        <input type="text" name="name" required />
+      </div>
+
+      <div class="c">
+        <p>E-Mail:</p>
+        <input type="email" name="email" required />
+      </div>
+      <div class="c">
+        <p>Message:</p>
+        <input type="text" style="padding-bottom: 80px;" name="Message" required />
+      </div>
+
+      <button type="submit" style="align-items: center;">Submit</button>
+    </div>
+  </form>
+{% endblock %}
