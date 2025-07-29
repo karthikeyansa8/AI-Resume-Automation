@@ -42,12 +42,12 @@ class resume_personal_details(models.Model):
     
 class Resume_Education(models.Model):
     
-    college_name = models.CharField()
-    degree = models.CharField()
+    college_name = models.CharField( max_length=254)
+    degree = models.CharField(max_length=254)
     cgpa = models.DecimalField(max_digits=3,decimal_places=2)
-    hsc_scl_name = models.CharField()
+    hsc_scl_name = models.CharField(max_length=254)
     hsc_marks = models.IntegerField()
-    sslc_scl_name = models.CharField()
+    sslc_scl_name = models.CharField(max_length=254)
     sslc_marks = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True,null=True)
 

@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import dj_database_url  
 from pathlib import Path
+import os
+from decouple import config  # --> for environment variables
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,14 +23,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-w!atb9o39ix-*#kl(n&8y8p36-ly(izo$0sq=6dza&$-d_+%xi'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    # 'blog.onrender.com',  
+    # 'boomers.onrender.com',
+    
 ]
 
 
@@ -45,6 +51,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware', # --> for static files in production
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -79,18 +86,24 @@ WSGI_APPLICATION = 'Karthi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql', #postgresql
-        # 'NAME': BASE_DIR / 'db.sqlite3',
 
-        'NAME':  'postgres',  #--> DB Name
-        'USER': 'postgres',
-        'PASSWORD': 'Karthi39!',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+DATABASES = {
+    
+    'default': dj_database_url.parse(config('DATABASE_URL')),
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql', #postgresql
+    #     # 'NAME': BASE_DIR / 'db.sqlite3',
+
+    #     'NAME':  'postgres',  #--> DB Name
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'Karthi39!',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432',
+    # }
 }
+
+# DATABASES["default"] = dj_database_url.parse("postgresql://boomers_user:xb8zvX5TsVyJ1r0ySa6oAFVHgIZP4UC6@dpg-d248mmruibrs73acbpng-a.oregon-postgres.render.com/boomers")
+# postgresql://boomers_user:xb8zvX5TsVyJ1r0ySa6oAFVHgIZP4UC6@dpg-d248mmruibrs73acbpng-a.oregon-postgres.render.com/boomers
 
 
 # Password validation
@@ -127,7 +140,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') #--> for collectstatic command production
+
 STATICFILES_DIRS = [
       BASE_DIR / 'blog/static/blog/',
       BASE_DIR / 'boomers/static/boomers/',
@@ -140,7 +156,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-# manually imported
+# manually imported    -->  For logging setup
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -166,7 +182,6 @@ EMAIL_HOST_USER = '1a852d62d3dcab'
 EMAIL_HOST_PASSWORD = 'c90fbaf627262e'
 
 # for image save from the form 
-import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT =os.path.join(BASE_DIR,'media')
 
