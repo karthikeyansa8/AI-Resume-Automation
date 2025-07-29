@@ -30,8 +30,9 @@ DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = [
     'https://django-uy1f.onrender.com',
-    # 'localhost',
-    # '127.0.0.1',
+    'django-uy1f.onrender.com',
+    'localhost',
+    '127.0.0.1',
     # 'blog.onrender.com',  
     # 'boomers.onrender.com',
     
