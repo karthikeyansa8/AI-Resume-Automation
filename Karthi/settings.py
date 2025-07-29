@@ -29,8 +29,9 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
+    'https://django-uy1f.onrender.com',
+    # 'localhost',
+    # '127.0.0.1',
     # 'blog.onrender.com',  
     # 'boomers.onrender.com',
     
