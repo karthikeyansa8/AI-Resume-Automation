@@ -92,16 +92,20 @@ WSGI_APPLICATION = 'Karthi.wsgi.application'
 DATABASES = {
     
     'default': dj_database_url.parse(config('DATABASE_URL')),
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql', #postgresql
-    #     # 'NAME': BASE_DIR / 'db.sqlite3',
+   
+}
 
-    #     'NAME':  'postgres',  #--> DB Name
-    #     'USER': 'postgres',
-    #     'PASSWORD': 'Karthi39!',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432',
-    # }
+
+DATABASES = {
+     'default': {
+        'ENGINE': 'django.db.backends.postgresql', #postgresql
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME':  config('DB_NAME'),
+        'USER': config('USER'),
+        'PASSWORD': config('PASSWORD'),
+        'HOST': config('HOST'),
+        'PORT': config('PORT'),
+    }
 }
 
 # DATABASES["default"] = dj_database_url.parse("postgresql://boomers_user:xb8zvX5TsVyJ1r0ySa6oAFVHgIZP4UC6@dpg-d248mmruibrs73acbpng-a.oregon-postgres.render.com/boomers")
