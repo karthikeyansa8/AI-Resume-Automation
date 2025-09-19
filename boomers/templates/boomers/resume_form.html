@@ -10,50 +10,145 @@
         <button type="button" onclick="showSection('skills')">Skills</button>
         <button type="button" onclick="showSection('projects')">Projects</button>
         <button type="button" onclick="showSection('internship')">Internship</button>
-        <button type="button" onclick="showSection('leadership')">Leadership & Extracurricular</button>
+        {% comment %} <button type="button" onclick="showSection('leadership')">Leadership & Extracurricular</button> {% endcomment %}
         <button type="button" onclick="showSection('certifications')">Certifications</button>
       </div>
 
       <form id="resumeForm" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div>
+
+        {% comment %} <div>
           {% include 'boomers/includes/errors.html' %}
-        </div>
+        </div> {% endcomment %}
+
         <!-- Personal -->
         <div id="personal" class="form-section active">
           <h2>Personal Details</h2>
           <div class="form-row">
             <div class="form-group">
-              <label for="first_name">First Name</label>
-              <input type="text" name="first_name" id="first_name" value="{{ form.first_name.value|default:'' }}" />
+              <label for="first_name">First Name *</label>
+              <input type="text" name="first_name" id="first_name" value="{{ personal_details_form.first_name.value|default:'' }}" required />
+
+              {% if personal_details_form.first_name.errors %}
+                {% for error in personal_details_form.first_name.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
+
             <div class="form-group">
-              <label for="last_name">Last Name</label>
-              <input type="text" name="last_name" id="last_name" value="{{ form.last_name.value|default:'' }}" />
+              <label for="last_name">Last Name *</label>
+              <input type="text" name="last_name" id="last_name" value="{{ personal_details_form.last_name.value|default:'' }}" required />
+              {% if personal_details_form.last_name.errors %}
+                {% for error in personal_details_form.last_name.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
           </div>
+
           <div class="form-row">
             <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" name="email" id="email" value="{{ form.email.value|default:'' }}" />
+              <label for="email">Email *</label>
+              <input type="email" name="email" id="email" value="{{ personal_details_form.email.value|default:'' }}" required />
+              {% if personal_details_form.email.errors %}
+                {% for error in personal_details_form.email.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+
+              {% if personal_details_form.email.non_field_errors %}
+                {% for non_field_error in personal_details_form.email.non_field_errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ non_field_error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
             <div class="form-group">
-              <label for="phone">Phone</label>
-              <input type="tel" name="phone" id="phone" value="{{ form.phone.value|default:'' }}" />
+              <label for="phone">Phone *</label>
+              <input type="tel" name="phone" id="phone" value="{{ personal_details_form.phone.value|default:'' }}" required />
+              {% if personal_details_form.phone.errors %}
+                {% for error in personal_details_form.phone.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+              {% if personal_details_form.phone.non_field_errors %}
+                {% for non_field_error in personal_details_form.phone.non_field_errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ non_field_error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="linkedin">LinkedIn</label>
-              <input type="text" name="linkedin" id="linkedin" placeholder="https://linkedin.com/in/..." value="{{ form.linkedin.value|default:'' }}" />
+              <input type="text" name="linkedin" id="linkedin" placeholder="https://linkedin.com/in/..." value="{{ personal_details_form.linkedin.value|default:'' }}" />
+              {% if personal_details_form.linkedin.errors %}
+                {% for error in personal_details_form.linkedin.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+
+              {% if personal_details_form.linkedin.non_field_errors %}
+                {% for non_field_error in personal_details_form.linkedin.non_field_errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ non_field_error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
             <div class="form-group">
               <label for="github">GitHub</label>
-              <input type="text" name="github" id="github" placeholder="https://github.com/..." value="{{ form.github.value|default:'' }}" />
+              <input type="text" name="github" id="github" placeholder="https://github.com/..." value="{{ personal_details_form.github.value|default:'' }}" />
+              {% if personal_details_form.github.errors %}
+                {% for error in personal_details_form.github.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+
+              {% if personal_details_form.github.non_field_errors %}
+                {% for non_field_error in personal_details_form.github.non_field_errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ non_field_error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
             <div class="form-group">
-              <label for="file">File</label>
-              <input type="file" name="img_url" id="github"  />
+              <label for="file">Photo</label>
+              <input type="file" name="img_url" id="github" />
+              {% if personal_details_form.img_url.errors %}
+                {% for error in personal_details_form.img_url.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="district">District *</label>
+              <input type="text" name="district" id="district" value="{{ personal_details_form.district.value|default:'' }}" required />
+              {% if personal_details_form.district.errors %}
+                {% for error in personal_details_form.email.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+
+              {% if personal_details_form.district.non_field_errors %}
+                {% for non_field_error in personal_details_form.email.non_field_errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ non_field_error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="state">State *</label>
+              <input type="text" name="state" id="state" value="{{ personal_details_form.state.value|default:'' }}" required />
+              {% if personal_details_form.state.errors %}
+                {% for error in personal_details_form.phone.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+              {% if personal_details_form.state.non_field_errors %}
+                {% for non_field_error in personal_details_form.phone.non_field_errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ non_field_error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
           </div>
         </div>
@@ -63,52 +158,174 @@
           <h2>Educational Details</h2>
           <div class="form-row">
             <div class="form-group">
-              <label for="college_name">College Name</label>
-              <input type="text" name="college_name" id="college_name" value="{{ form.college_name.value|default:'' }}" />
-              {% if form.college_name.errors %} 
-                {% for error in form.college_name.errors %}
-                    <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+              <label for="college_name">College Name *</label>
+              <input type="text" name="college_name" id="college_name" value="{{ education_form.college_name.value|default:'' }}" required />
+              {% if education_form.college_name.errors %}
+                {% for error in education_form.college_name.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
                 {% endfor %}
               {% endif %}
             </div>
             <div class="form-group">
-              <label for="degree">Degree</label>
-              <input type="text" name="degree" id="degree" value="{{ form.degree.value|default:'' }}" />
+              <label for="college_district">College District *</label>
+              <input type="text" name="college_district" id="college_district" value="{{ education_form.college_district.value|default:'' }}" required />
+              {% if education_form.college_district.errors %}
+                {% for error in education_form.college_district.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="college_state">College State *</label>
+              <input type="text" name="college_state" id="college_state" value="{{ education_form.college_state.value|default:'' }}" required />
+              {% if education_form.college_state.errors %}
+                {% for error in education_form.college_state.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="cgp">CGPA</label>
-              <input type="text" name="cgpa" id="cgpa" value="{{ form.cgpa.value|default:'' }}" />
 
-              {% comment %} give the name value to the errors checking eg: name="cgpa" {% endcomment %}
-              {% if form.cgpa.errors %} 
-                {% for error in form.cgpa.errors %}
-                    <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="degree">Degree *</label>
+              <input type="text" name="degree" id="degree" value="{{ education_form.degree.value|default:'' }}" required />
+              {% if education_form.degree.errors %}
+                {% for error in education_form.degree.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
                 {% endfor %}
               {% endif %}
             </div>
             <div class="form-group">
-              <label for="hsc_school">HSC School Name</label>
-              <input type="text" name="hsc_scl_name" id="hsc_school" value="{{ form.hsc_scl_name.value|default:'' }}" />
+              <label for="branch">Branch *</label>
+              <input type="text" name="branch" id="branch" value="{{ education_form.branch.value|default:'' }}" required />
+              {% if education_form.branch.errors %}
+                {% for error in education_form.branch.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="cgpa">CGPA *</label>
+              <input type="text" name="cgpa" id="cgpa" value="{{ education_form.cgpa.value|default:'' }}" required />
+              {% if education_form.cgpa.errors %}
+                {% for error in education_form.cgpa.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="cgpa">Upto which semester *</label>
+              <input type="text" name="cgpa_semester" id="cgpa" placeholder="4th or 5th" value="{{ education_form.cgpa_semester.value|default:'' }}" required />
+              {% if education_form.cgpa_semester.errors %}
+                {% for error in education_form.cgpa_semester.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="college_passed_out_year">Graduation Year *</label>
+              <input type="text" name="college_passed_out_year" id="college_passed_out_year" placeholder="2022-2026" value="{{ education_form.college_passed_out_year.value|default:'' }}" required />
+              {% if education_form.college_passed_out_year.errors %}
+                {% for error in education_form.college_passed_out_year.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="hsc_marks">HSC Percentage</label>
-              <input type="text" name="hsc_marks" id="hsc_marks" value="{{ form.hsc_marks.value|default:'' }}" />
+              <label for="hsc_school">HSC School Name *</label>
+              <input type="text" name="hsc_scl_name" id="hsc_school" value="{{ education_form.hsc_scl_name.value|default:'' }}" required />
+              {% if education_form.hsc_scl_name.errors %}
+                {% for error in education_form.hsc_scl_name.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
             <div class="form-group">
-              <label for="sslc_school">SSLC School Name</label>
-              <input type="text" name="sslc_scl_name" id="sslc_school" value="{{ form.sslc_scl_name.value|default:'' }}" />
+              <label for="hsc_scl_district">HSC School District *</label>
+              <input type="text" name="hsc_scl_district" id="hsc_scl_district" value="{{ education_form.hsc_scl_district.value|default:'' }}" required />
+              {% if education_form.hsc_scl_district.errors %}
+                {% for error in education_form.hsc_scl_district.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="hsc_scl_state">HSC School State *</label>
+              <input type="text" name="hsc_scl_state" id="hsc_school" value="{{ education_form.hsc_scl_state.value|default:'' }}" required />
+              {% if education_form.hsc_scl_state.errors %}
+                {% for error in education_form.hsc_scl_state.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="hsc_passed_out_year">HSC Passed out Year *</label>
+              <input type="text" name="hsc_passed_out_year" id="hsc_passed_out_year" value="{{ education_form.hsc_passed_out_year.value|default:'' }}" required />
+              {% if education_form.hsc_passed_out_year.errors %}
+                {% for error in education_form.hsc_passed_out_year.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="hsc_marks">HSC Percentage *</label>
+              <input type="text" name="hsc_percentage" id="hsc_marks" value="{{ education_form.hsc_percentage.value|default:'' }}" required />
+              {% if education_form.hsc_percentage.errors %}
+                {% for error in education_form.hsc_percentage.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="sslc_marks">SSLC Percentage</label>
-              <input type="text" name="sslc_marks" id="sslc_marks" value="{{ form.sslc_marks.value|default:'' }}" />
+              <label for="sslc_school">SSLC School Name *</label>
+              <input type="text" name="sslc_scl_name" id="sslc_school" value="{{ education_form.sslc_scl_name.value|default:'' }}" required />
+              {% if education_form.sslc_scl_name.errors %}
+                {% for error in education_form.sslc_scl_name.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
-            <div class="form-group"></div>
+            <div class="form-group">
+              <label for="sslc_scl_district">SSLC School District *</label>
+              <input type="text" name="sslc_scl_district" id="sslc_scl_district" value="{{ education_form.sslc_scl_district.value|default:'' }}" required />
+              {% if education_form.sslc_scl_district.errors %}
+                {% for error in education_form.sslc_scl_district.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="sslc_scl_state">SSLC School State *</label>
+              <input type="text" name="sslc_scl_state" id="sslc_scl_state" value="{{ education_form.sslc_scl_state.value|default:'' }}" required />
+              {% if education_form.sslc_scl_state.errors %}
+                {% for error in education_form.sslc_scl_state.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="sslc_passed_out_year">SSLC Passed out Year *</label>
+              <input type="text" name="sslc_passed_out_year" id="sslc_passed_out_year" value="{{ education_form.sslc_passed_out_year.value|default:'' }}" required />
+              {% if education_form.sslc_passed_out_year.errors %}
+                {% for error in education_form.sslc_passed_out_year.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="sslc_marks">SSLC Percentage *</label>
+              <input type="text" name="sslc_percentage" id="sslc_marks" value="{{ education_form.sslc_percentage.value|default:'' }}" required />
+              {% if education_form.sslc_percentage.errors %}
+                {% for error in education_form.sslc_percentage.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
           </div>
         </div>
 
@@ -117,12 +334,22 @@
           <h2>Skills</h2>
           <div class="form-row">
             <div class="form-group">
-              <label for="programming_languages">Programming Languages</label>
-              <input type="text" name="programming_languages" id="programming_languages" />
+              <label for="programming_languages">Programming Languages *</label>
+              <input type="text" name="prog_languages" id="programming_languages" value="{{ skills_form.prog_languages.value|default:'' }}" required />
+              {% if skills_form.prog_languages.errors %}
+                {% for error in skills_form.prog_languages.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
             <div class="form-group">
               <label for="tools_technologies">Tools & Technologies</label>
-              <input type="text" name="tools_technologies" id="tools_technologies" />
+              <input type="text" name="Tools_technologies" id="tools_technologies" value="{{ skills_form.Tools_technologies.value|default:'' }}" />
+              {% if skills_form.Tools_technologies.errors %}
+                {% for error in skills_form.Tools_technologies.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
           </div>
         </div>
@@ -132,8 +359,8 @@
           <h2>Projects</h2>
           <div class="form-row">
             <div class="form-group" style="max-width: 200px;">
-              <label for="projectCount">Number of Projects</label>
-              <input type="number" min="0" max="10" id="projectCount" />
+              <label for="project_count">Number of Projects</label>
+              <input type="number" name="project_count" id="projectCount" value="{{ project_form.project_count.value|default:'' }}" />
             </div>
             <div class="form-group" style="align-self: flex-end;">
               <button type="button" style="padding:9px 28px;" onclick="generateProjects()">Add Projects</button>
@@ -148,53 +375,138 @@
           <div class="form-row">
             <div class="form-group">
               <label for="intern_company">Company Name</label>
-              <input type="text" name="intern_company" id="intern_company" />
+              <input type="text" name="company_name" id="intern_company" value="{{ internships_form.company_name.value|default:'' }}" />
+              {% if internships_form.company_name.errors %}
+                {% for error in internships_form.company_name.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
             <div class="form-group">
               <label for="intern_location">Location</label>
-              <input type="text" name="intern_location" id="intern_location" />
+              <input type="text" name="location" id="intern_location" value="{{ internships_form.location.value|default:'' }}" />
+              {% if internships_form.location.errors %}
+                {% for error in internships_form.location.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="intern_role">Role</label>
-              <input type="text" name="intern_role" id="intern_role" />
+              <input type="text" name="role" id="intern_role" value="{{ internships_form.role.value|default:'' }}" />
+              {% if internships_form.role.errors %}
+                {% for error in internships_form.role.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
             <div class="form-group">
               <label for="intern_duration">Duration</label>
-              <input type="text" name="intern_duration" id="intern_duration" />
+              <input type="text" name="duration" id="intern_duration" value="{{ internships_form.duration.value|default:'' }}" />
+              {% if internships_form.duration.errors %}
+                {% for error in internships_form.duration.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="start_date">Start Date</label>
+              <input type="date" name="start_date" id="intern_company" value="{{ internships_form.start_date.value|default:'' }}" />
+              {% if internships_form.start_date.errors %}
+                {% for error in internships_form.start_date.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="end_date">End Date</label>
+              <input type="date" name="end_date" id="intern_location" value="{{ internships_form.end_date.value|default:'' }}" />
+              {% if internships_form.end_date.errors %}
+                {% for error in internships_form.end_date.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
           </div>
         </div>
 
         <!-- Leadership -->
-        <div id="leadership" class="form-section">
+        {% comment %} <div id="leadership" class="form-section">
           <h2>Leadership & Extracurricular</h2>
           <div class="form-row">
             <div class="form-group">
               <label for="activity">Activity</label>
-              <input type="text" name="activity" id="activity" />
+              <input type="text" name="activity_name" id="activity" value="{{ extracurilcular_form.activity_name.value|default:'' }}" />
+              {% if extracurilcular_form.activity_name.errors %}
+                {% for error in extracurilcur_form.activity_name.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
             <div class="form-group">
               <label for="activity_description">Description</label>
-              <textarea name="activity_description" id="activity_description"></textarea>
+              <textarea name="description" id="activity_description"></textarea>
+              {% if extracurilcular_form.description.errors %}
+                {% for error in extracurilcur_form.description.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
           </div>
-        </div>
+        </div> {% endcomment %}
 
         <!-- Certifications -->
         <div id="certifications" class="form-section">
           <h2>Certifications</h2>
           <div class="form-row">
             <div class="form-group">
-              <label for="certifications">Certifications (List)</label>
-              <textarea name="certifications" id="certifications"></textarea>
+              <label for="certification_name">Certifications (List)</label>
+              <textarea name="certification_name" id="certifications"></textarea>
+              {% if certifications_form.certification_name.errors %}
+                {% for error in certifications_form.certification_name.errors %}
+                  <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             </div>
           </div>
         </div>
 
         <button type="submit" class="form-button">Submit</button>
+        <br />
+
+        {% comment %}messages{% endcomment %}
+        {% if messages %}
+          {% for message in messages %}
+            {% if message.tags == 'success' %}
+              <div style="background-color: lightgreen; padding: 10px; margin: 10px 0; border-radius: 5px;">
+                <span>{{ message }}</span>
+                <button type="button" class="close-button" onclick="this.parentElement.style.display='none';">&times;</button>
+              </div>
+            {% else %}
+              <div style="background-color: red; padding: 10px; margin: 10px 0; border-radius: 5px; color: white;">
+                <span>{{ message }}</span>
+                <button type="button" class="close-button" onclick="this.parentElement.style.display='none';">&times;</button>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       </form>
+
+      {% comment %}generate resume button{% endcomment %}
+      {% if messages %}
+        {% for message in messages %}
+          {% if message.tags == 'success' %}
+            <br />
+            <div>
+              <a style="text-decoration: none;" href="{% url 'generateresume' %}" class="form-button">Generate Resume</a>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
     </div>
   </div>
   <script src="{% static 'boomers/scripts.js' %}"></script>

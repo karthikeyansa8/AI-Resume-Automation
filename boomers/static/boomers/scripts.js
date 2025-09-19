@@ -27,7 +27,7 @@ function showSection(id) {
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="project${i}_description">Project ${i} - Description</label>
+              <label for="project${i}_description">Project ${i} - Summary</label>
               <textarea name="project${i}_description" id="project${i}_description"></textarea>
             </div>
           </div>
@@ -35,3 +35,8 @@ function showSection(id) {
                 container.appendChild(div);
             }
         }
+
+function generateresume(url){
+      console.log('url'+ url);
+      window.location.href = url;
+}

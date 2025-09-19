@@ -1,0 +1,9 @@
+<form method="post">
+  {% csrf_token %}
+  {{ forms.management_form }}
+
+  {% for form in forms %}
+    {{ form }}
+  {% endfor %}
+  <button type="submit">Submit</button>
+</form>

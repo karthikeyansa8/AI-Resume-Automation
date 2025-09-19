@@ -345,6 +345,8 @@ body {
 
 .form-container .form-button:hover {
     background-color: #45a049;
+    scale: 1.5;
+    transition: all 0.3s ease-in-out;
 }
 
 .form-container .form-text {

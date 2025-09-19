@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from boomers.models import Person_Details, Resume_Education, resume_personal_details
-from boomers.forms import Education_form, Loginform, RegistrationForm, Reset_password_form, Resume_personal_details_form, forgot_password_form
+from boomers.Resume_generation import create_resume
+from boomers.models import Person_Details, Resume_Education, Resume_Internships, Resume_Projects, Resume_Skills, Resume_certifications, resume_personal_details
+from boomers.forms import Resume_Education_form, Loginform, RegistrationForm, Reset_password_form, Resume_Internships_form, Resume_Projects_form, Resume_Skills_form, Resume_certifications_form, Resume_personal_details_form, dummy_form, forgot_password_form
 from django.contrib.auth.models import User
 from django.contrib import messages # ---> for send a success message
 from django.contrib.auth import authenticate, login as auth_login,logout as auth_logout #--> for authentication
@@ -13,7 +14,10 @@ from django.contrib.sites.shortcuts import get_current_site # --> for get curren
 from django.template.loader import render_to_string # --> for render a template to str
 from django.core.mail import send_mail # --> for send a mail
 from django.contrib.auth.decorators import login_required # --> for login required decorator
-
+from django.forms import formset_factory
+import os
+from django.http import FileResponse, Http404
+from django.conf import settings
 # Create your views here.
 
 @login_required(login_url='/login') # --> for login required decorator
@@ -182,11 +186,241 @@ def reset_password_email(request,uidb64,token):
     return render(request,'boomers/reset_password.html',{'form':form})
     
     
-@login_required(login_url='login') # --> for login required decorator
+# @login_required(login_url='login') # --> for login required decorator
 def resume_form(request):
-    form  = Resume_personal_details_form()
+    
+    # personal_details
+    personal_details_form  = Resume_personal_details_form()
+    
+    # education  
+    education_form = Resume_Education_form()
+    
+    # skills      
+    skills_form = Resume_Skills_form()
+    
+    #Projects
+    projects_form = Resume_Projects_form()
+    
+    # internships
+    internships_form = Resume_Internships_form()
+    
+    #extracuriculars
+    # extracurilcular_form = Resume_leadership_extracurricular_form()
+    
+    # certifications
+    certifications_form = Resume_certifications_form()
+    
     if request.method == 'POST':
-        form = Resume_personal_details_form(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
-    return render(request,'boomers/resume_form.html',{'form':form})
+        # personal details
+        personal_details_form = Resume_personal_details_form(request.POST,request.FILES)
+        
+        # education
+        education_form = Resume_Education_form(request.POST)
+        
+        # skills
+        skills_form = Resume_Skills_form(request.POST)
+        
+        # Projects
+        try:
+            count = int(request.POST.get('project_count'))
+        except (ValueError, TypeError):
+            count = 0
+            
+        projects_form = Resume_Projects_form(request.POST,project_count=count)  
+            
+        # Internships
+        internships_form = Resume_Internships_form(request.POST)
+        
+        # Extracurriculars
+        # extracurilcular_form = Resume_leadership_extracurricular_form(request.POST)
+        
+        # Certifications
+        certifications_form = Resume_certifications_form(request.POST)
+        
+        
+        
+        if (personal_details_form.is_valid() and  education_form.is_valid() and 
+            skills_form.is_valid() and projects_form.is_valid() and internships_form.is_valid() and 
+            """extracurilcular_form.is_valid()""" and certifications_form.is_valid() ):
+            
+            #personal details
+            personal_details_form.save()
+            
+            
+            email = request.POST.get('email')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            try:
+                user = resume_personal_details.objects.get(email=email,first_name=first_name,last_name=last_name)  # --> get the user from the DB
+                request.session["user_id"] = user.id  # --> store the user id in the session
+    
+            except :
+                request.session.pop("user_id", None) # --> if user not found set the session user_id to None
+                user = None
+
+            #education
+            edu = education_form.save(commit=False)  # --> to save the form without committing to the DB
+            if user is not  None:
+                edu.person_id_id = user.id
+                edu.save()
+            
+            
+            #skills
+            skill = skills_form.save(commit=False)
+            if user is not None:
+                skill.person_id_id = user.id
+                skill.save()
+            
+            #projects
+            for i in range(1,count+1):
+                if request.POST.get(f'project{i}_name') and request.POST.get(f'project{i}_keywords') and request.POST.get(f'project{i}_description'):
+                    project = projects_form.save(commit=False)
+                    if user is not None:
+                        project.person_id_id = user.id
+                        project.save()
+            
+            #internships
+            internship_fields = ['company_name', 'role', 'location', 'duration', 'start_date', 'end_date']
+            for field in internship_fields:
+                if request.POST.get(field): 
+                    if internships_form.is_valid():
+                        intern = internships_form.save(commit=False)
+                        if user is not None:
+                            intern.person_id_id = user.id
+                            intern.save()
+    
+            # #extracurilculars
+            # leadership_extracurricular = ['activity_name', 'description']
+            # for field in leadership_extracurricular:
+            #     if request.POST.get(field): 
+            #         if extracurilcular_form.is_valid():
+            #             extra = extracurilcular_form.save(commit=False)
+            #             if user is not None:
+            #                 extra.person_id_id = user.id
+            #                 extra.save()
+                
+        
+            # certifications
+            certifications = ['certification_name']
+            for field in certifications:
+                if request.POST.get(field): 
+                    if certifications_form.is_valid():
+                        cer = certifications_form.save(commit=False)
+                        if user is not None:
+                            cer.person_id_id = user.id
+                            cer.save()
+
+            messages.success(request,'Details are valid!')
+            # return user.id
+                        
+            
+        else:
+            print("Form is invalid")
+            messages.error(request,'Details is invalid, please check the All the Section fields')
+   
+   
+    return render(request,'boomers/resume_form.html',{'personal_details_form':personal_details_form,
+                                                      'education_form':education_form,
+                                                      'skills_form':skills_form,
+                                                      'projects_form':projects_form,
+                                                      'internships_form':internships_form,
+                                                    #   'extracurilcular_form':extracurilcular_form,
+                                                      'certifications_form':certifications_form})
+    
+# ------>   dummy  
+def dummy(request):
+    
+    # formset = dummy_form()
+    # if request.method == 'POST':
+    #     formser = dummy_form(request.POST)
+        
+    dummy_formset = formset_factory(dummy_form, extra=3)  # --> create a formset with 2 extra forms
+    if request.method == 'POST':
+        formset = dummy_formset(request.POST)
+        if formset.is_valid():
+            for form in formset:
+                print(form.cleaned_data['name'])  # --> print the changed data in the form
+    return render(request,'boomers/dummy.html',{'forms':dummy_formset})
+
+
+# class ResumeGeneration:
+def generateresume(request):
+    
+    user_id = request.session.get("user_id")  # --> get the user id from the session
+    print("user_id-->",user_id)
+    if user_id is not None:
+        try:
+            try:
+                personal_detail = resume_personal_details.objects.get(id=user_id)  # --> get the user details from the DB
+            except :
+                personal_detail = None
+            try:
+                education_detail = Resume_Education.objects.get(person_id_id=user_id)  # --> get the education details from the DB
+            except:
+                education_detail = None
+            try:
+                skills_detail = Resume_Skills.objects.get(person_id_id=user_id)  # --> get the skills details from the DB
+            except:
+                skills_detail = None
+            try:
+                projects_detail = Resume_Projects.objects.get(person_id_id=user_id)  # --> get the projects details from the DB
+            except:
+                projects_detail = None
+            try:
+                internships_detail = Resume_Internships.objects.get(person_id_id=user_id)  # --> get the internships details from the DB
+            except:
+                internships_detail = None
+            # try:
+            #     extracurricular_detail = Resume_leadership_extracurricular.objects.get(person_id_id=user_id)  # --> get the extracurricular details from the DB
+            # except:
+            #     extracurricular_detail = None
+            try:
+                certifications_detail = Resume_certifications.objects.get(person_id_id=user_id)  # --> get the certifications details from the DB
+            except:
+                certifications_detail = None
+                            
+            print('personal_detail:',personal_detail,'\neducation_detail:',education_detail,'\nskills_detail:',skills_detail,
+                '\nprojects_detail:',projects_detail,'\ninternships_detail:',internships_detail,
+                # '\nextracurricular_detail:',extracurricular_detail,
+                '\ncertifications_detail:',certifications_detail)
+
+        except Exception as e:
+            # print("Error occurred:", e)
+            raise Exception("Failed to fetch user details")
+        
+        #-----------> Resume generation call part <---------------
+
+        resume_generation = create_resume(personal_detail,education_detail,skills_detail,
+                                            projects_detail,internships_detail,
+                                        #   extracurricular_detail,
+                                            certifications_detail)
+        resume_generation.main()  # --> call the resume method to create a resume
+        
+        #-----------> Resume generation call part <---------------
+        
+    return render(request,"boomers/generateresume.html")
+    # return HttpResponse('Resume Created Successfully')
+
+def download_resume(request):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        raise Http404("User not found in session")
+
+    try:
+        personal_detail = resume_personal_details.objects.get(id=user_id)
+    except resume_personal_details.DoesNotExist:
+        raise Http404("Personal details not found")
+
+    filename = f"{personal_detail.first_name}_{personal_detail.last_name}_Resume.docx"
+    resume_folder = os.path.join(settings.BASE_DIR, "Resumes")
+    file_path = os.path.join(resume_folder, filename)
+
+    if not os.path.exists(file_path):
+        raise Http404("Resume not found")
+
+    response = FileResponse(
+        open(file_path, "rb"),
+        content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    return response

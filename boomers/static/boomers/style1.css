@@ -73,6 +73,10 @@
             margin-top: 10px;
         }
 
+        .form-button:hover {
+            background-color: whitesmoke;
+        }
+
         @keyframes fade-in {
             from {
                 opacity: 0;
