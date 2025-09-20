@@ -58,3 +58,6 @@ class Automation:
             # response = chat.send_message(input_text)
             print("AI:", response.text)
             # return response.text
+            
+if __name__ == '__main__':
+    Automation().test()

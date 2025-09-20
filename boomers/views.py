@@ -398,7 +398,25 @@ def generateresume(request):
         
         #-----------> Resume generation call part <---------------
         
-    return render(request,"boomers/generateresume.html")
+        # Return the resume file 
+        filename = f"{personal_detail.first_name}_{personal_detail.last_name}_Resume.docx"
+        resume_folder = os.path.join(settings.BASE_DIR, "Resumes")
+        file_path = os.path.join(resume_folder, filename)
+
+        if not os.path.exists(file_path):
+            raise Http404("Resume not found")
+
+        response = FileResponse(
+            open(file_path, "rb"),
+            content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+    
+    else:
+        raise Http404("User details not found ")
+    
+    # return render(request,"boomers/generateresume.html")
     # return HttpResponse('Resume Created Successfully')
 
 def download_resume(request):
