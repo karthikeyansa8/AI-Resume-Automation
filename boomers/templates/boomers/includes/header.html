@@ -1,10 +1,10 @@
 <header>
   <div class="header">
-    <h3>Boomers</h3>
+    <h3>Resume Generation</h3>
     {% if user.is_authenticated %}
-      <p>
+      {% comment %} <p>
         <a style=" margin-right: 10px;" href="{% url 'index' %}">Home</a>
-      </p>
+      </p> {% endcomment %}
       <p>
         <a style=" margin-right: 10px;" href="{% url 'logout' %}">Logout</a>
       </p>

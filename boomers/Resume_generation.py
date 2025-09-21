@@ -3,6 +3,7 @@ from docx.shared import Pt, Inches
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
+from docx.enum.text import WD_TAB_ALIGNMENT, WD_PARAGRAPH_ALIGNMENT
 import os
 from .AI_Automation import Automation
 
@@ -115,8 +116,8 @@ class create_resume:
         # Set page margins
         for section in self.doc.sections:
             section.top_margin = Inches(0.5)
-            section.bottom_margin = Inches(0.7)
-            section.left_margin = Inches(0.5)
+            section.bottom_margin = Inches(0.5)
+            section.left_margin = Inches(0.7)
             section.right_margin = Inches(0.7)
 
     # Function to add hyperlinks
@@ -231,47 +232,101 @@ class create_resume:
         summary.runs[0].font.size = Pt(11)
 
     # ---------- EDUCATION ----------
-    def education(self): 
-       
+    def education(self):
         self.add_section_title("EDUCATION")
 
-        education = [(f"{self.clg_name.upper()}, {self.clg_dist.title()}\t", f"{self.clg_passout}\n{self.degree.title()} in {self.branch.title()}\nCGPA : {self.cgpa}/10 upto {self.cgpa_sem} semester"),
-                    (f"{self.hsc_name.upper()}, {self.hsc_dist.title()}\t", f"{self.hsc_poy}\nHSC - PERCENTAGE : {self.hsc_percentage}"),
-                    (f"{self.sslc_name.upper()}, {self.sslc_dist.title()}\t", f"{self.sslc_poy}\nSSLC - PERCENTAGE : {self.sslc_percentage}")]
-
-        for school in education:
+        # ---- Helper: heading with bold name, normal district, year inside margins ----
+        def add_heading_with_year(name_text, district_text, year_text):
             p = self.doc.add_paragraph()
-            p.paragraph_format.line_spacing = Pt(18)  # 18pt line spacing
+            p.paragraph_format.line_spacing = Pt(18)
 
-            p.add_run(school[0]).bold = True
-            p.add_run(school[1])
+            # Right tab stop set to the **usable text width** (inside margins)
+            section = self.doc.sections[0]
+            usable_width = section.page_width - section.left_margin - section.right_margin
+            tab_stops = p.paragraph_format.tab_stops
+            tab_stops.add_tab_stop(usable_width, WD_TAB_ALIGNMENT.RIGHT)
+
+            # Bold name
+            run_name = p.add_run(name_text)
+            run_name.bold = True
+            run_name.font.name = "Times New Roman"
+            run_name.font.size = Pt(11)
+
+            # Normal district
+            run_dist = p.add_run(f", {district_text}\t")
+            run_dist.font.name = "Times New Roman"
+            run_dist.font.size = Pt(11)
+
+            # Year (right-aligned at tab stop)
+            run_year = p.add_run(year_text)
+            run_year.font.name = "Times New Roman"
+            run_year.font.size = Pt(11)
+
+        # ---- Helper: indented bullet ----
+        def add_bullet(text):
+            p = self.doc.add_paragraph(text, style='List Bullet')
+            p.paragraph_format.line_spacing = Pt(18)
+            p.paragraph_format.left_indent = Inches(0.5)  # one tab indent
             for r in p.runs:
                 r.font.name = "Times New Roman"
                 r.font.size = Pt(11)
-                
-                
+
+        # College
+        add_heading_with_year(
+            self.clg_name.upper(),
+            self.clg_dist.title(),
+            self.clg_passout
+        )
+        add_bullet(f"{self.degree.title()} in {self.branch.title()}")
+        add_bullet(f"CGPA : {self.cgpa}/10 upto {self.cgpa_sem} semester")
+
+        # HSC
+        add_heading_with_year(
+            self.hsc_name.upper(),
+            self.hsc_dist.title(),
+            self.hsc_poy
+        )
+        add_bullet(f"HSC – PERCENTAGE : {self.hsc_percentage}")
+
+        # SSLC
+        add_heading_with_year(
+            self.sslc_name.upper(),
+            self.sslc_dist.title(),
+            self.sslc_poy
+        )
+        add_bullet(f"SSLC – PERCENTAGE : {self.sslc_percentage}")                    
+                    
 
     # ---------- SKILLS ----------
-    def skills(self):
-       
 
+    def skills(self):
         self.add_section_title("SKILLS")
-        skills_list = [
-            ("Programming Languages: ", f"{self.prog_lang}"),
-            # ("Frameworks: ", "Django"),
-            # ("Databases: ", "PostgreSQL"),
-            ("Tools and Technologies: ", f"{self.tool_tech}"),
-            # ("Development & Automation: ", "Web Scraping (BeautifulSoup), OMR Sheet Generation")
-        ]
-        for title, val in skills_list:
-            if val or val is not None:
-                p = self.doc.add_paragraph()
-                p.paragraph_format.line_spacing = Pt(18)  # 18pt line spacing
-                p.add_run(title.title()).bold = True
-                p.add_run(val.title())
-                for r in p.runs:
-                    r.font.name = "Times New Roman"
-                    r.font.size = Pt(11)
+
+        # Programming Languages
+        p1 = self.doc.add_paragraph()
+        p1.paragraph_format.line_spacing = Pt(18)
+        run1_title = p1.add_run("Programming Languages: ")
+        run1_title.bold = True
+        run1_title.font.name = "Times New Roman"
+        run1_title.font.size = Pt(11)
+
+        run1_val = p1.add_run(self.prog_lang.title())
+        run1_val.font.name = "Times New Roman"
+        run1_val.font.size = Pt(11)
+
+        # Tools and Technologies
+        if self.tool_tech and self.tool_tech is not None:
+            p2 = self.doc.add_paragraph()
+            p2.paragraph_format.line_spacing = Pt(18)
+            run2_title = p2.add_run("Tools And Technologies: ")
+            run2_title.bold = True
+            run2_title.font.name = "Times New Roman"
+            run2_title.font.size = Pt(11)
+
+            run2_val = p2.add_run(self.tool_tech.title())
+            run2_val.font.name = "Times New Roman"
+            run2_val.font.size = Pt(11)
+
 
     # ---------- PROJECTS ----------
     def projects(self):
@@ -307,30 +362,50 @@ class create_resume:
                 pr.font.size = Pt(11)
 
     # ---------- INTERNSHIP ----------
-    def internship(self):
-        
+  
 
-        if self.comp_name is not None:
-            
+    def internship(self):
+        if self.comp_name:
             self.add_section_title("INTERNSHIP")
+
+            # Main heading line
             p = self.doc.add_paragraph()
-            p.paragraph_format.line_spacing = Pt(18)  # 18pt line spacing
-            # p.add_run("Learn Basics | — NIT, IIT Alumni Company (Salem)\tBackend Developer Intern | Sep 2024 - Nov 2024").bold = True
-            p.add_run(f"{self.comp_name.title()} ({self.location.title()}) \tRole:{self.role.title()} | {self.start_date} - {self.end_date}").bold = True
-            for r in p.runs:
-                r.font.name = "Times New Roman"
-                r.font.size = Pt(11)
-                
-            input = f"Worked as a {self.role} intern at {self.comp_name}"
-            intern_desc = Automation().intern_description(input)
+            p.paragraph_format.line_spacing = Pt(18)
+
+            # Company name – bold
+            run_company = p.add_run(f"{self.comp_name.title()} ")
+            run_company.bold = True
+            run_company.font.name = "Times New Roman"
+            run_company.font.size = Pt(11)
+
+            # Location – normal
+            run_loc = p.add_run(f"({self.location.title()})  ")
+            run_loc.font.name = "Times New Roman"
+            run_loc.font.size = Pt(11)
+
+            # Role – bold
+            run_role = p.add_run(f"Role: {self.role.title()} ")
+            run_role.bold = True
+            run_role.font.name = "Times New Roman"
+            run_role.font.size = Pt(11)
+
+            # Duration – normal, inside page margins with a separator
+            run_period = p.add_run(f"| {self.start_date} - {self.end_date}")
+            run_period.font.name = "Times New Roman"
+            run_period.font.size = Pt(11)
+
+            # Bullet points describing the internship
+            input_text = f"Worked as a {self.role} intern at {self.comp_name}"
+            intern_desc = Automation().intern_description(input_text)
             intern_desc = intern_desc.split("||")
-            # print(intern_desc)
-            self.add_bullets(
-                # "Backend Development: Designed and built scalable backend systems using Python, collaborating with senior developers.",
-                # "API Development: Developed and integrated RESTful APIs to enhance application functionality and data exchange.",
-                # "Code Optimization & Debugging: Identified performance bottlenecks, optimized code, and resolved critical bugs to improve efficiency."
-                intern_desc
-            )
+
+            for desc in intern_desc:
+                bullet = self.doc.add_paragraph(desc, style='List Bullet')
+                bullet.paragraph_format.line_spacing = Pt(18)
+                bullet.paragraph_format.left_indent = Inches(0.5)  # indent bullets
+                for r in bullet.runs:
+                    r.font.name = "Times New Roman"
+                    r.font.size = Pt(11)
 
     # # ---------- LEADERSHIP ----------
     # def leadership(self):

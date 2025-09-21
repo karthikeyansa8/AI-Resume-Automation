@@ -112,7 +112,7 @@ def login(request):
                 auth_login(request,user)
                 print('Successfully Login!')
                 # messages.success(request,'Login Successfully!')
-                return redirect(reverse('index'))
+                return redirect(reverse('resumeform'))
                 
     return render(request,'boomers/login.html',{'form':form})
 
@@ -186,7 +186,7 @@ def reset_password_email(request,uidb64,token):
     return render(request,'boomers/reset_password.html',{'form':form})
     
     
-# @login_required(login_url='login') # --> for login required decorator
+@login_required(login_url='login') # --> for login required decorator
 def resume_form(request):
     
     # personal_details
@@ -250,13 +250,14 @@ def resume_form(request):
             email = request.POST.get('email')
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
-            try:
-                user = resume_personal_details.objects.get(email=email,first_name=first_name,last_name=last_name)  # --> get the user from the DB
+            
+            user = resume_personal_details.objects.filter(email=email,first_name=first_name,last_name=last_name).last()  # --> get the user from the DB
+            
+            if user:
                 request.session["user_id"] = user.id  # --> store the user id in the session
-    
-            except :
+
+            else:
                 request.session.pop("user_id", None) # --> if user not found set the session user_id to None
-                user = None
 
             #education
             edu = education_form.save(commit=False)  # --> to save the form without committing to the DB

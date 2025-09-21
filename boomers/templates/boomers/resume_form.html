@@ -14,7 +14,7 @@
         <button type="button" onclick="showSection('certifications')">Certifications</button>
       </div>
 
-      <form id="resumeForm" method="post" enctype="multipart/form-data">
+      <form id="resumeForm" method="post" >
         {% csrf_token %}
 
         {% comment %} <div>
@@ -109,7 +109,8 @@
                 {% endfor %}
               {% endif %}
             </div>
-            <div class="form-group">
+            
+            {% comment %} <div class="form-group">
               <label for="file">Photo</label>
               <input type="file" name="img_url" id="github" />
               {% if personal_details_form.img_url.errors %}
@@ -117,7 +118,7 @@
                   <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>
                 {% endfor %}
               {% endif %}
-            </div>
+            </div> {% endcomment %}
           </div>
           
           <div class="form-row">
@@ -464,8 +465,8 @@
           <h2>Certifications</h2>
           <div class="form-row">
             <div class="form-group">
-              <label for="certification_name">Certifications (List)</label>
-              <textarea name="certification_name" id="certifications"></textarea>
+              <label for="certification_name">Certifications (Enter the names with comma ",")</label>
+              <textarea name="certification_name" id="certifications" placeholder="Eg: Certification 1, Certification 2"></textarea>
               {% if certifications_form.certification_name.errors %}
                 {% for error in certifications_form.certification_name.errors %}
                   <p style="font-size: 13px; text-align: right; color: red; display: inline;">*{{ error }}</p>

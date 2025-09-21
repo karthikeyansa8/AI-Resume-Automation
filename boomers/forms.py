@@ -86,13 +86,13 @@ class Resume_personal_details_form (forms.ModelForm):
     github = forms.URLField(label='github',required=False)
     district = forms.CharField(label='district',required=True)
     state = forms.CharField(label='state',required=True)
-    img_url = forms.ImageField(label='img_url',required=False)
+    # img_url = forms.ImageField(label='img_url',required=False)
 
     
     class Meta:
         model = resume_personal_details
         fields = ['first_name',
-                  'last_name','email','phone','linkedin','github','district','state','img_url'
+                  'last_name','email','phone','linkedin','github','district','state' #, 'img_url'
         ]
     
     def clean(self):
