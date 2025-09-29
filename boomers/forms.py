@@ -99,7 +99,7 @@ class Resume_personal_details_form (forms.ModelForm):
         cleaned_data =  super().clean()
         # print(cleaned_data) # ---> {'first_name': 'Karthikeyan', 'last_name': 'S A', 'email': 'karthikeyansa8@gmail.com', 'phone': '+917358996885'}
         email = cleaned_data.get('email')
-        check_email =re.match(r'^[a-zA-Z0-9]+@gmail\.com',str(email))
+        check_email =re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',str(email))
         
         if check_email is None:
             raise forms.ValidationError('Invalid email id')
